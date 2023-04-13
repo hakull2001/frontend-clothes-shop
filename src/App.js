@@ -11,6 +11,8 @@ import { GlobalStyle } from "./GlobalStyle";
 import { ThemeProvider } from "styled-components";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Login from "./pages/Login/login"
+import RequireAuth from "./components/RequireAuth";
 
 const App = () => {
   const theme = {
@@ -49,8 +51,11 @@ const App = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/singleproduct/:id" element={<SingleProduct />} />
+          <Route element={<RequireAuth allowedRoles={["Member"]} />}>
           <Route path="/cart" element={<Cart />} />
+        </Route>
           <Route path="*" element={<ErrorPage />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </Router>

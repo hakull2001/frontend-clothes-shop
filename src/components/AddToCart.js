@@ -5,13 +5,21 @@ import CartAmountToggle from "./CartAmountToggle";
 import { NavLink } from "react-router-dom";
 import { Button } from "../styles/Button";
 import { useCartContext } from "../context/cart_context";
+import axios from 'axios';
+import { useEffect } from "react";
+import RequireAuth from "./RequireAuth";
+const token = localStorage.getItem("token");
+const config = {
+  headers: { Authorization: `Bearer ${token}` }
+};
 
-const AddToCart = ({ product }) => {
-  const { addToCart } = useCartContext();
+const AddToCart =  ({ product }) => {
 
-  const { id, colors, stock } = product;
+  
 
-  const [color, setColor] = useState(colors[0]);
+  const { id, color, sold } = product;
+  const listColor = ['red', 'green', 'blue']
+  const [colors, setColors] = useState(listColor[0]);
   const [amount, setAmount] = useState(1);
 
   const setDecrease = () => {
@@ -19,36 +27,51 @@ const AddToCart = ({ product }) => {
   };
 
   const setIncrease = () => {
-    amount < stock ? setAmount(amount + 1) : setAmount(stock);
+    amount < sold ? setAmount(amount + 1) : setAmount(sold);
   };
+
+  const handleSubmit = async (productId, quantity) => {
+   
+    try {
+      await axios.post('http://localhost:8080/api/v1/carts', {productId, quantity, color : colors}, config);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(()=>{
+    handleSubmit();
+  }, []);
 
   return (
     <Wrapper>
       <div className="colors">
         <p>
           Color:
-          {colors.map((curColor, index) => {
+          {listColor.map((curColor, index) => {
             return (
               <button
                 key={index}
                 style={{ backgroundColor: curColor }}
-                className={color === curColor ? "btnStyle active" : "btnStyle"}
-                onClick={() => setColor(curColor)}>
-                {color === curColor ? <FaCheck className="checkStyle" /> : null}
+                className={colors === curColor ? "btnStyle active" : "btnStyle"}
+                onClick={() => setColors(curColor)}>
+                {colors === curColor ? <FaCheck className="checkStyle" /> : null}
               </button>
             );
           })}
         </p>
       </div>
-
       {/* add to cart  */}
       <CartAmountToggle
         amount={amount}
         setDecrease={setDecrease}
         setIncrease={setIncrease}
       />
-
-      <NavLink to="/cart" onClick={() => addToCart(id, color, amount, product)}>
+    {
+      !token &&   <NavLink to="/login">
+      <Button className="btn">Add To Cart</Button>
+    </NavLink>
+    }
+      <NavLink  onClick={() => handleSubmit(id, amount) && window.location.assign("http://localhost:3000/cart")}>
         <Button className="btn">Add To Cart</Button>
       </NavLink>
     </Wrapper>

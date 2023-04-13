@@ -2,10 +2,32 @@ import React from "react";
 import styled from "styled-components";
 import { BsFillGridFill, BsList } from "react-icons/bs";
 import { useFilterContext } from "../context/filter_context";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 const Sort = () => {
-  const { filter_products, grid_view, setGridView, setListView, sorting } =
+  
+  const { filter_products, grid_view, setGridView, setListView, sorting, filters } =
     useFilterContext();
+    const [products, setProducts] = useState([]);
+    useEffect( () => {
+      if(filters.category === "all"){
+        axios.get(decodeURI(`http://localhost:8080/api/v1/products?name=${filters.text}&fromPrice=${filters.minPrice}&toPrice=${filters.price}`))
+        .then(response => {
+          setProducts(response.data.result.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+      }else
+       axios.get(decodeURI(`http://localhost:8080/api/v1/products/${filters.category}?name=${filters.text}&fromPrice=${filters.minPrice}&toPrice=${filters.price}`))
+        .then(response => {
+          setProducts(response.data.result.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }, [filters]);
+   
   return (
     <Wrapper className="sort-section">
       {/* 1st column  */}
@@ -24,7 +46,7 @@ const Sort = () => {
       </div>
       {/* 2nd column  */}
       <div className="product-data">
-        <p>{`${filter_products.length} Product Available`}</p>
+        <p>{filters.category === "all" ? `${products.length} Product Available` : `${products.length} Product Available`} </p>
       </div>
 
       {/* 3rd column  */}

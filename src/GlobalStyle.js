@@ -119,7 +119,6 @@ ${"" /* resuable code section  */}
 
      .intro-data {
       margin-bottom: 0;
-      text-transform: uppercase;
       color: #5138ee;
     }
 
@@ -127,7 +126,6 @@ ${"" /* resuable code section  */}
       position: absolute;
       top: 15%;
       right: 10%;
-      text-transform: uppercase;
       background-color: ${({ theme }) => theme.colors.bg};
       color: ${({ theme }) => theme.colors.helper};
       padding: 0.8rem 2rem;
@@ -139,8 +137,7 @@ input, textarea{
     max-width: 50rem;
     color: ${({ theme }) => theme.colors.black};
     padding: 1.6rem 2.4rem;
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    text-transform: uppercase;
+    border: 1px solid ${({ theme }) => theme.colors.border}
    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
 }
     input[type="submit"]{
@@ -150,8 +147,7 @@ input, textarea{
     color: ${({ theme }) => theme.colors.white};
     padding: 1.4rem 2.2rem;
     border-style: solid;
-    border-width: .1rem;
-    text-transform: uppercase;
+    border-width: .1rem
     font-size: 1.8rem;
     cursor: pointer;
     }

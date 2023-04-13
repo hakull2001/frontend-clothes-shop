@@ -1,7 +1,6 @@
 const cartReducer = (state, action) => {
   if (action.type === "ADD_TO_CART") {
     let { id, color, amount, product } = action.payload;
-
     // tackle the existing product
 
     let existingProduct = state.cart.find(
@@ -34,9 +33,9 @@ const cartReducer = (state, action) => {
         name: product.name,
         color,
         amount,
-        image: product.image[0].url,
+        image: product.productImages[0].imageUrl,
         price: product.price,
-        max: product.stock,
+        max: product.sold,
       };
 
       return {

@@ -10,61 +10,62 @@ import { MdSecurity } from "react-icons/md";
 import { TbTruckDelivery, TbReplace } from "react-icons/tb";
 import Star from "./components/Star";
 import AddToCart from "./components/AddToCart";
-
-const API = "https://api.pujakaitem.com/api/products";
+import axios from "axios";
+import { useState } from "react";
+const API = "http://localhost:8080/api/v1/products/detail";
 
 const SingleProduct = () => {
-  const { getSingleProduct, isSingleLoading, singleProduct } =
+  const { isSingleLoading } =
     useProductContext();
 
   const { id } = useParams();
 
-  const {
-    id: alias,
-    name,
-    company,
-    price,
-    description,
-    category,
-    stock,
-    stars,
-    reviews,
-    image,
-  } = singleProduct;
+  const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    getSingleProduct(`${API}?id=${id}`);
-  }, []);
+    axios.get(`${API}/${id}`)
+      .then(response => {
+        setProduct(response.data.result.data);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [id]);
 
+  if (!product) {
+    return <div>Loading...</div>;
+  }
   if (isSingleLoading) {
     return <div className="page_loading">Loading.....</div>;
   }
-
+  let stars = product.productRates.reduce((total, current)=>{
+    return total + current.rating;
+  },0)
   return (
-    <Wrapper>
-      <PageNavigation title={name} />
+    product && <Wrapper>
+      <PageNavigation title={product.name} />
       <Container className="container">
         <div className="grid grid-two-column">
           {/* product Images  */}
           <div className="product_images">
-            <MyImage imgs={image} />
+            <MyImage imgs={product.productImages} />
           </div>
 
           {/* product dAta  */}
           <div className="product-data">
-            <h2>{name}</h2>
-            <Star stars={stars} reviews={reviews} />
+            <h2>{product.name}</h2>
+            <Star stars={stars/product.productRates.length} reviews={product.productRates[0].comment} />
 
             <p className="product-data-price">
               MRP:
               <del>
-                <FormatPrice price={price + 250000} />
+                <FormatPrice price={product.price + 250000} />
               </del>
             </p>
             <p className="product-data-price product-data-real-price">
-              Deal of the Day: <FormatPrice price={price} />
+              Deal of the Day: <FormatPrice price={product.price} />
             </p>
-            <p>{description}</p>
+            <p>{product.description}</p>
             <div className="product-data-warranty">
               <div className="product-warranty-data">
                 <TbTruckDelivery className="warranty-icon" />
@@ -90,17 +91,17 @@ const SingleProduct = () => {
             <div className="product-data-info">
               <p>
                 Available:
-                <span> {stock > 0 ? "In Stock" : "Not Available"}</span>
+                <span> {product.sold > 0 ? "In Stock" : "Not Available"}</span>
               </p>
               <p>
-                ID : <span> {id} </span>
+                ID : <span> {product.id} </span>
               </p>
               <p>
-                Brand :<span> {company} </span>
+                {/* Brand :<span> {company} </span> */}
               </p>
             </div>
             <hr />
-            {stock > 0 && <AddToCart product={singleProduct} />}
+            {product.sold > 0 && <AddToCart product={product} />}
           </div>
         </div>
       </Container>

@@ -1,32 +1,28 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
 import reducer from "../reducer/cartReducer";
-
+import axios from "axios";
+import React from "react";
 const CartContext = createContext();
-
-const getLocalCartData = () => {
-  let localCartData = localStorage.getItem("thapaCart");
-  // if (localCartData === []) {
-  //   return [];
-  // } else {
-  //   return JSON.parse(localCartData);
-  // }
-  const parsedData = JSON.parse(localCartData);
-  if (!Array.isArray(parsedData)) return [];
-
-  return parsedData;
-};
-
+const token = localStorage.getItem("token");
+const headers = { 'Authorization': `Bearer ${token}` };
 const initialState = {
-  // cart: [],
-  cart: getLocalCartData(),
+  cart: [],
   total_item: "",
   total_price: "",
   shipping_fee: 50000,
 };
 
-const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
 
+const GetLocalCartData = async () => {
+  await axios.get('http://localhost:8080/api/v1/carts', { headers })
+      .then(response => initialState.cart.push(response.data.result.data.orderItems));
+    return;
+    };
+
+const CartProvider = ({ children }) => {
+  GetLocalCartData();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
   const addToCart = (id, color, amount, product) => {
     dispatch({ type: "ADD_TO_CART", payload: { id, color, amount, product } });
   };
@@ -54,14 +50,13 @@ const CartProvider = ({ children }) => {
   // to add the data in localStorage
   // get vs set
 
-  useEffect(() => {
+   useEffect(() => {
     // dispatch({ type: "CART_TOTAL_ITEM" });
     // dispatch({ type: "CART_TOTAL_PRICE" });
     dispatch({ type: "CART_ITEM_PRICE_TOTAL" });
 
-    localStorage.setItem("thapaCart", JSON.stringify(state.cart));
-  }, [state.cart]);
-
+    localStorage.setItem("dataCarts", JSON.stringify(state.cart[0]));
+  }, [state.cart[0]]);
   return (
     <CartContext.Provider
       value={{

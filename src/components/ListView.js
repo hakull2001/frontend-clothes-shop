@@ -8,11 +8,11 @@ const ListView = ({ products }) => {
     <Wrapper className="section">
       <div className="container grid">
         {products.map((curElem) => {
-          const { id, name, image, price, description } = curElem;
+          const { id, name, productImages, price, description } = curElem;
           return (
             <div className="card grid grid-two-column">
               <figure>
-                <img src={image} alt={name} />
+                <img src={productImages[0].imageUrl} alt={name} />
               </figure>
 
               <div className="card-data">

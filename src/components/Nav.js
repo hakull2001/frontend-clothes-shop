@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { FiShoppingCart } from "react-icons/fi";
@@ -6,12 +6,40 @@ import { CgMenu, CgClose } from "react-icons/cg";
 import { useCartContext } from "../context/cart_context";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../styles/Button";
+import { Link, useNavigate, Link as RouterLink } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
-const Nav = () => {
+import axios from "axios";
+
+
+const Nav =  () => {
+  const navigage = useNavigate();
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
   const [menuIcon, setMenuIcon] = useState();
-  const { total_item } = useCartContext();
-  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const [amountCart, setAmountCart] = useState(0);
+  const auth = useSelector((state) => state.auth);
+  const user = JSON.parse(localStorage.getItem("user"));
 
+  const [jwt, setJwt] = useState(null);
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("persist:auth");
+    localStorage.removeItem("user");
+    navigage("/login");
+    window.location.assign("http://localhost:3000");
+  }
+  useEffect(()=>{
+    setJwt(token);
+    amount.then(result => setAmountCart(result.data));
+
+  }, [])
+
+  const amount =  axios.get("http://localhost:8080/api/v1/carts/amount", config);
+  amount.then(result => setAmountCart(result.data));
   const Nav = styled.nav`
     .navbar-lists {
       display: flex;
@@ -203,30 +231,37 @@ const Nav = () => {
             </NavLink>
           </li>
 
-          {isAuthenticated && <p>{user.name}</p>}
+          {jwt && <p>{`${user.firstName} ${user.lastName}`}</p>}
 
-          {isAuthenticated ? (
+          {jwt ? (
             <li>
               <Button
-                onClick={() => logout({ returnTo: window.location.origin })}>
+                onClick={() =>handleLogout() }>
                 Log Out
               </Button>
             </li>
           ) : (
             <li>
-              <Button onClick={() => loginWithRedirect()}>Log In</Button>
+                <Link
+                      component={RouterLink}
+                      to="/login"
+                      variant="h6"
+                    >
+            <Button>Log In</Button></Link>
+              
             </li>
           )}
 
           <li>
-            <NavLink to="/cart" className="navbar-link cart-trolley--link">
+            <NavLink to={"/cart"} onClick={()=>{
+              // window.location.assign("http://localhost:3000/cart")
+            }} className="navbar-link cart-trolley--link">
               <FiShoppingCart className="cart-trolley" />
-              <span className="cart-total--item"> {total_item} </span>
+              <span className="cart-total--item"> {amountCart} </span>
             </NavLink>
           </li>
         </ul>
 
-        {/* two button for open and close of menu */}
         <div className="mobile-navbar-btn">
           <CgMenu
             name="menu-outline"
