@@ -11,7 +11,7 @@ const CartItem = (props) => {
   const handleIncrease = () => {
     setQuantity(quantity + 1);
     props.handles(quantity+1, props.id)
-    window.location.reload();
+    // window.location.reload();
   };
 
   const handleDecrease = () => {
@@ -19,7 +19,7 @@ const CartItem = (props) => {
       setQuantity(quantity - 1);
     }
     props.handles(quantity > 1 ? quantity-1 : quantity, props.id);
-    window.location.reload();
+    // window.location.reload();
   };
 
   const token = localStorage.getItem("token");
@@ -48,9 +48,36 @@ const CartItem = (props) => {
   // const setIncrease = () => {
   //   amount < stock ? setAmounts(amount + 1) : setAmounts(stock);
   // };
+  const [isChecked, setIsChecked] = useState(false);
 
+  const handleOnChange = () => {
+    setIsChecked(!isChecked);
+  };
+  const [subTotal, setSubtotal] = useState(0);
+  const handleCheckBox = () => {
+    if(isChecked === false){
+        setSubtotal(subTotal + props.product.price * quantity);
+    }else{
+      setSubtotal(subTotal - props.product.price * quantity);
+    }
+    props.callBack(isChecked, subTotal, props.product.price * quantity);
+  }
+  useEffect(()=>{
+    handleCheckBox();
+  }, [isChecked])
   return (
     <div className="cart_heading grid grid-five-column">
+         <div className="topping">
+        <input
+          type="checkbox"
+          id="topping"
+          name="topping"
+          value="Paneer"
+          checked={isChecked}
+          onChange={handleOnChange}
+          checkBox = {handleCheckBox}
+        />
+      </div>
       <div className="cart-image--name">
         <div>
           <figure>

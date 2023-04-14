@@ -16,6 +16,10 @@ const GetCartDetail = () => {
   const [id, setId] = useState();
   const [orderItemId, setOrderItemId] = useState();
   const [quantity, setQuantity] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [subTotal, setSubtotal] = useState(0);
+
+
   const handleQuantity = async (childData, idP) => {
     setQuantity(childData);
     setOrderItemId(idP);
@@ -36,7 +40,6 @@ const GetCartDetail = () => {
     }
     
   }
-  const [subTotal, setSubtotal] = useState(0);
   const callbacKFunction = (childData) => {
     setId(childData);
   }
@@ -58,18 +61,41 @@ const GetCartDetail = () => {
       console.error(error);
     }
   };
+  
+  const callBack = (isChecked, total, id)=> {
+    if(isChecked === true){
+     {
+      
+      // setSubtotal(subTotal + total);
+      console.log(subTotal);
+      console.log(total);
+      console.log(id);
+      setSubtotal(subTotal + id);
+     }
+    }else if(isChecked === false && subTotal !==0)
+      {
+  
+        console.log(subTotal);
+        console.log(total);
+        console.log(id);
+        setSubtotal(subTotal - id);
+      }
+
+}
   useEffect(()=>{
     handleSubmit();
     handleQuantity();
-  }, []);
+    callBack();
+  }, [subTotal]);
+
+
   return (
     <div>
       {cartDetail && (
          <Wrapper>
          <div className="container">
-       
-   
            <div className="cart_heading grid grid-five-column">
+           <p>Checkbox</p>
              <p>Item</p>
              <p className="cart-hide">Price</p>
              <p>Quantity</p>
@@ -79,7 +105,7 @@ const GetCartDetail = () => {
            <hr />
            <div className="cart-item">
              {cartDetail && cartDetail.orderItems.map((curElem) => {
-               return <CartItem handles = {handleQuantity} parentCallback={callbacKFunction} key={curElem.id} {...curElem} />;
+               return <CartItem callBack = {callBack} handles = {handleQuantity} parentCallback={callbacKFunction} key={curElem.id} {...curElem} />;
              })}
            </div>
            <hr />
@@ -90,7 +116,7 @@ const GetCartDetail = () => {
                <Button> continue Shopping </Button>
              </NavLink>
              <Button className="btn btn-clear" >
-               clear cart
+               Mua hàng
              </Button>
            </div>
    
@@ -100,9 +126,7 @@ const GetCartDetail = () => {
                <div>
                  <p>subtotal:</p>
                  <p>
-                   <FormatPrice price={cartDetail.orderItems.reduce((total, current)=>{
-      return total + ((current.quantity * current.product.price));
-    },0)} />
+                   <FormatPrice price={subTotal} />
                  </p>
                </div>
                <div>
@@ -115,9 +139,7 @@ const GetCartDetail = () => {
                <div>
                  <p>order total:</p>
                  <p>
-                   <FormatPrice price={cartDetail.orderItems.reduce((total, current)=>{
-      return total + ((current.quantity * current.product.price));
-    },0) + 50000} />
+                   <FormatPrice price={subTotal + 50000} />
                  </p>
                </div>
              </div>
@@ -148,7 +170,7 @@ const Wrapper = styled.section`
   }
 
   .grid-five-column {
-    grid-template-columns: repeat(4, 1fr) 0.3fr;
+    grid-template-columns: repeat(5, 1fr) 0.3fr;
     text-align: center;
     align-items: center;
   }

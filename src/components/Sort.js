@@ -9,10 +9,12 @@ const Sort = () => {
   const { filter_products, grid_view, setGridView, setListView, sorting, filters } =
     useFilterContext();
     const [products, setProducts] = useState([]);
+    const [total, setTotal] = useState(0);
     useEffect( () => {
       if(filters.category === "all"){
         axios.get(decodeURI(`http://localhost:8080/api/v1/products?name=${filters.text}&fromPrice=${filters.minPrice}&toPrice=${filters.price}`))
         .then(response => {
+          setTotal(response.data.result.pagination.total);
           setProducts(response.data.result.data);
         })
         .catch(error => {
@@ -22,12 +24,12 @@ const Sort = () => {
        axios.get(decodeURI(`http://localhost:8080/api/v1/products/${filters.category}?name=${filters.text}&fromPrice=${filters.minPrice}&toPrice=${filters.price}`))
         .then(response => {
           setProducts(response.data.result.data);
+          setTotal(response.data.result.pagination.total);
         })
         .catch(error => {
           console.log(error);
         });
     }, [filters]);
-   
   return (
     <Wrapper className="sort-section">
       {/* 1st column  */}
@@ -46,7 +48,7 @@ const Sort = () => {
       </div>
       {/* 2nd column  */}
       <div className="product-data">
-        <p>{filters.category === "all" ? `${products.length} Product Available` : `${products.length} Product Available`} </p>
+        <p>{filters.category === "all" ? `${total} Product Available` : `${total} Product Available`} </p>
       </div>
 
       {/* 3rd column  */}

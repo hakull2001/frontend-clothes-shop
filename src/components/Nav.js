@@ -36,8 +36,11 @@ const Nav =  () => {
     setJwt(token);
     amount.then(result => setAmountCart(result.data));
 
-  }, [])
-
+  }, [amountCart])
+  const [isShow, setIsShow] = useState(true);
+  const handleShow = (e) => {
+    setIsShow(e);
+  }
   const amount =  axios.get("http://localhost:8080/api/v1/carts/amount", config);
   amount.then(result => setAmountCart(result.data));
   const Nav = styled.nav`
@@ -202,7 +205,10 @@ const Nav =  () => {
             <NavLink
               to="/"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => {
+                setMenuIcon(false);
+                handleShow(true);
+              }}>
               Home
             </NavLink>
           </li>
@@ -210,7 +216,10 @@ const Nav =  () => {
             <NavLink
               to="/about"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => {
+                setMenuIcon(false);
+                handleShow(true);
+              }}>
               About
             </NavLink>
           </li>
@@ -218,7 +227,10 @@ const Nav =  () => {
             <NavLink
               to="/products"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => {
+                setMenuIcon(false);
+                handleShow(true);
+              }}>
               Products
             </NavLink>
           </li>
@@ -226,17 +238,23 @@ const Nav =  () => {
             <NavLink
               to="/contact"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
+              onClick={() => {
+                setMenuIcon(false);
+                handleShow(true);
+              }}>
               Contact
             </NavLink>
           </li>
 
-          {jwt && <p>{`${user.firstName} ${user.lastName}`}</p>}
+          {jwt && <NavLink onClick={()=>handleShow(true)} className="navbar-link" to={"/profile"}><p>{`${user.firstName} ${user.lastName}`}</p></NavLink>}
 
           {jwt ? (
             <li>
               <Button
-                onClick={() =>handleLogout() }>
+                onClick={() =>{
+                  handleLogout();
+                  handleShow();
+                } }>
                 Log Out
               </Button>
             </li>
@@ -247,31 +265,40 @@ const Nav =  () => {
                       to="/login"
                       variant="h6"
                     >
-            <Button>Log In</Button></Link>
+            <Button onClick={()=>handleShow(true)}>Log In</Button></Link>
               
             </li>
           )}
 
-          <li>
+          {isShow && 
+            <li>
             <NavLink to={"/cart"} onClick={()=>{
               // window.location.assign("http://localhost:3000/cart")
+              handleShow(false);
             }} className="navbar-link cart-trolley--link">
               <FiShoppingCart className="cart-trolley" />
               <span className="cart-total--item"> {amountCart} </span>
             </NavLink>
           </li>
+          }
         </ul>
 
         <div className="mobile-navbar-btn">
           <CgMenu
             name="menu-outline"
             className="mobile-nav-icon"
-            onClick={() => setMenuIcon(true)}
+            onClick={() => {
+              setMenuIcon(true);
+              handleShow(true);
+            }}
           />
           <CgClose
             name="close-outline"
             className="mobile-nav-icon close-outline"
-            onClick={() => setMenuIcon(false)}
+            onClick={() => {
+              setMenuIcon(false);
+              handleShow(true);
+            }}
           />
         </div>
       </div>

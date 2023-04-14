@@ -13,7 +13,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./pages/Login/login"
 import RequireAuth from "./components/RequireAuth";
-
+import User from "./components/User";
 const App = () => {
   const theme = {
     colors: {
@@ -50,9 +50,11 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/singleproduct/:id" element={<SingleProduct />} />
+          <Route path="/singleproduct/:id" element={<SingleProduct/>} />
           <Route element={<RequireAuth allowedRoles={["Member"]} />}>
           <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<User />} />
+
         </Route>
           <Route path="*" element={<ErrorPage />} />
           <Route path="/login" element={<Login />} />
