@@ -1,0 +1,19 @@
+@import "variables";
+@import "./mui/button";
+@import "./mui/checkbox";
+
+.bs-text-primary {
+  color: $color-text-primary !important;
+}
+
+.bs-bg-primary {
+  background: $color-primary !important;
+}
+
+.bs-color-primary {
+  color: $color-primary !important;
+}
+
+.bs-text-black {
+  color: black !important;
+}
