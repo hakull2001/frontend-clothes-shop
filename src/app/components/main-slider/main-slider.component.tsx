@@ -20,6 +20,7 @@ import { Category } from "@app/models/category.model";
 import CategoryService, {
   CategoryPaginationOption,
 } from "@app/services/http/category.service";
+import ImageSlider from "../imageSlider";
 
 type PropTypes = {
   isShowBanner?: boolean;
@@ -34,15 +35,6 @@ function MainSlider(props: PropTypes) {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    const bannerOptions: BannerPaginationOption = {
-      ...DEFAULT_PAGINATION_OPTION,
-      fetchType: FETCH_TYPE.USER,
-    };
-
-    subscribeUntilDestroy(BannerService.getList(bannerOptions), (response) => {
-      const data = (response.data as Banner[]).map((item) => new Banner(item));
-      setBanners(data);
-    });
 
     const categoryOptions: CategoryPaginationOption = {
       ...DEFAULT_PAGINATION_OPTION,
@@ -64,6 +56,7 @@ function MainSlider(props: PropTypes) {
 
   return (
     <Box paddingTop={5} paddingX={5.5} marginBottom={2.5}>
+  
       <Box style={{ position: "relative", borderTop: "1px solid black" }}>
         {!!banners.length && isShowBanner && (
           <Carousel
@@ -71,7 +64,7 @@ function MainSlider(props: PropTypes) {
             showStatus={false}
             showThumbs={false}
             interval={4000}
-            transitionTime={1000}
+            transitionTime={1500}
             swipeScrollTolerance={50}
             infiniteLoop
             autoPlay
@@ -84,42 +77,6 @@ function MainSlider(props: PropTypes) {
             ))}
           </Carousel>
         )}
-        <div className="menu-wrapper">
-          <ul>
-            <li>
-              <Link to="">
-                <i className="fa fa-bars"></i>{" "}
-                <span style={{ fontWeight: "500" }}>Danh mục sản phẩm</span>
-              </Link>
-              <ul className="menu">
-                {!!categories.length &&
-                  categories.map((item, index) => (
-                    <li
-                      key={index}
-                      className={clsx({
-                        "has-child": !!item.linkedCategories?.length ?? false,
-                      })}
-                    >
-                      <Link to={`/products?category=${item.slug}`}>
-                        {item.name}
-                      </Link>
-                      {!!item.linkedCategories?.length && (
-                        <ul className="sub-menu">
-                          {item.linkedCategories.map((item, index) => (
-                            <li key={index}>
-                              <Link to={`/products?category=${item.slug}`}>
-                                {item.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                  ))}
-              </ul>
-            </li>
-          </ul>
-        </div>
       </Box>
     </Box>
   );

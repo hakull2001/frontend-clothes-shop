@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar as AppBarMui,
   Avatar,
@@ -34,6 +34,11 @@ import { clearUser } from "@app/store/auth/auth.action";
 import StorageService from "@core/services/storage";
 import { useStyles } from "./make-style";
 import { clearCart } from "@app/store/cart/cart.action";
+import CategoryService, { CategoryPaginationOption } from "@app/services/http/category.service";
+import { ResponseResult } from "@core/services/http/http.service";
+import { Category } from "@app/models/category.model";
+import { DEFAULT_PAGINATION_OPTION, FETCH_TYPE } from "@app/shared/constants/common";
+import useObservable from "@core/hooks/use-observable.hook";
 
 function AppBar() {
   const classes = useStyles();
@@ -221,6 +226,9 @@ function AppBar() {
   //   //   </List>
   //   // </div>
   // );
+  const { subscribeUntilDestroy } = useObservable();
+
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const toggleDrawer = (anchor: string, open: boolean) => (event: any) => {
     if (
@@ -233,11 +241,29 @@ function AppBar() {
 
     setState({ ...state, [anchor]: open });
   };
+  useEffect(() => {
+    const categoryOptions: CategoryPaginationOption = {
+      ...DEFAULT_PAGINATION_OPTION,
+      fetchType: FETCH_TYPE.USER,
+    };
 
+    subscribeUntilDestroy(
+      CategoryService.getList(categoryOptions),
+      (response: ResponseResult) => {
+        const data = (response.data as Category[]).map(
+          (item) => new Category(item)
+        );
+        setCategories(data);
+      }
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className={classes.grow}>
       <AppBarMui position="static" style={{backgroundColor:'#000000'}}>
         <Toolbar>
+       
           {/* <IconButton
             edge="start"
             className={classes.menuButton}
@@ -259,7 +285,46 @@ function AppBar() {
             <Typography className={classes.title} variant="h6" noWrap>
               HIBOOK
             </Typography>
+          
           </Link>
+          <div className="menu-wrapper">
+          <ul>
+            <li>
+              <Link to="" style={{backgroundColor:'#000000'}}>
+                {/* <i className="fa fa-bars"></i>{" "} */}
+                <Typography className={classes.title} variant="h6" noWrap>
+              THỂ LOẠI
+            </Typography>
+                        </Link>
+              <ul className="menu">
+                {!!categories.length &&
+                  categories.map((item, index) => (
+                    <li
+                      key={index}
+                      className={clsx({
+                        "has-child": !!item.linkedCategories?.length ?? false,
+                      })}
+                    >
+                      <Link to={`/products?category=${item.slug}`}>
+                        {item.name}
+                      </Link>
+                      {!!item.linkedCategories?.length && (
+                        <ul className="sub-menu">
+                          {item.linkedCategories.map((item, index) => (
+                            <li key={index}>
+                              <Link to={`/products?category=${item.slug}`}>
+                                {item.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+              </ul>
+            </li>
+          </ul>
+        </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />

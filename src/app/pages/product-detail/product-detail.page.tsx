@@ -7,8 +7,11 @@ import {
   Button,
   Typography,
   TextField,
+  Paper,
 } from "@material-ui/core";
-import { ShoppingCart as ShoppingCartIcon } from "@material-ui/icons";
+import { Card } from 'react-bootstrap'
+
+import { Message, ShoppingCart as ShoppingCartIcon } from "@material-ui/icons";
 import MuiImageSlider from "mui-image-slider";
 import { switchMap } from "rxjs/operators";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,7 +38,13 @@ import { fetchCart } from "@app/store/cart/cart.epic";
 import useDestroy from "@core/hooks/use-destroy.hook";
 import { GlobalState } from "@app/store";
 import { Role } from "@app/shared/types/user.type";
-import Star from "@app/components/star";
+import Rating from "@app/components/rating";
+import { Row, Col, Image, ListGroup } from 'react-bootstrap'
+import ProductRateService from "@app/services/http/product.rate.serive";
+import { ProductRate, ProductRateDto } from "@app/models/product-rate.model";
+import ProductRateComponent from "@app/components/product-rate";
+
+
 
 function ProductDetail() {
   const classes = useStyles();
@@ -102,6 +111,7 @@ function ProductDetail() {
     setQuantity(+ev.target.value);
   };
 
+  
   const onAddToCartClick = () => {
     if (!userId) {
       navigate(
@@ -141,7 +151,18 @@ function ProductDetail() {
       });
     });
   };
-
+  const [total, setTotal] = useState(0);
+  const [productRates, setProductRates] = useState<ProductRate[]>([]);
+    useEffect(() => {
+      if(product.id !== undefined)
+        subscribeOnce(ProductRateService.getList(product?.id), (response) => {
+          setProductRates(response.data as ProductRate[]);
+          setTotal(response.pagination?.total || 0);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+  
+  
   return (
     <div ref={pageRef}>
       <Helmet>
@@ -198,6 +219,9 @@ function ProductDetail() {
             <Box style={{ display: "flex" }}>
               <Grid item xs={7} sm={7}>
                 <ul>
+                  {/* <li>
+                    <Rating value={5} text={`${total} reviews`}/>
+                  </li> */}
                   <li>
                     Tác giả:{" "}
                     <span style={{ fontWeight: "bolder" }}>
@@ -233,12 +257,6 @@ function ProductDetail() {
                       {product?.price?.toLocaleString("vn") + "đ"}
                     </span>
                   </li>
-                  <li>
-                    Đánh giá:{" "}
-                    <span style={{ fontWeight: "bolder" }}>
-                    <Star stars={5}></Star>
-                    </span>
-                  </li>
                 </ul>
               </Grid>
               <Grid
@@ -259,18 +277,19 @@ function ProductDetail() {
                       shrink: true,
                     }}
                     InputProps={{ inputProps: { min: 1 } }}
-                    style={{ width: "12em" }}
+                    style={{ width: "11em" }}
                     variant="outlined"
                   />
                   <Box>
                     <Button
+                    style={{backgroundColor:'#000000'}}
                       variant="contained"
                       color="primary"
                       startIcon={<ShoppingCartIcon />}
                       className={classes.btnAddToCart}
                       onClick={onAddToCartClick}
                     >
-                      Thêm vào giỏ hàng
+                      Thêm vào giỏ
                     </Button>
                   </Box>
                 </Box>
@@ -285,10 +304,13 @@ function ProductDetail() {
             </Box>
           </Box>
         </Grid>
+
       </Box>
+      <ProductRateComponent id={product.id}/>      
+
       <Box
         paddingTop={10}
-        paddingX={5.5}
+        // paddingX={5.5}
         maxWidth="930px"
         style={{ margin: "0 auto" }}
       >
@@ -297,7 +319,7 @@ function ProductDetail() {
           color="textPrimary"
           style={{
             margin: "0 auto",
-            background: "#EBE9E9",
+            // background: "#EBE9E9",
             padding: "0.2em",
           }}
         >
@@ -332,7 +354,7 @@ function ProductDetail() {
       {!!lastViewProducts.length && (
         <Box
           paddingTop={5}
-          paddingX={5.5}
+          // paddingX={5.5}
           maxWidth="930px"
           style={{ margin: "0 auto" }}
         >
@@ -341,7 +363,7 @@ function ProductDetail() {
             color="textPrimary"
             style={{
               margin: "0 auto",
-              background: "#EBE9E9",
+              // background: "#EBE9E9",
               padding: "0.2em",
             }}
           >

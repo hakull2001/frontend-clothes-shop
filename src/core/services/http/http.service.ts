@@ -85,9 +85,7 @@ export class _HttpService {
     method: string,
     options?: HttpOptions
   ): Observable<T> {
-    const token = this.getAccessToken();
-    console.log(token);
-    
+    const token = this.getAccessToken();    
     let url = this.resolveUri(uri);
 
     if (options?.queryParams) {

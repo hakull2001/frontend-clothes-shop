@@ -100,7 +100,7 @@ export const mainMenuItems: MenuItem[] = [
   {
     linkTo: "/",
     tooltip: "Trang chủ",
-    mainContent: "Home",
+    mainContent: "Trang chủ",
     icon: HomeIcon,
   },
   {
@@ -112,37 +112,37 @@ export const mainMenuItems: MenuItem[] = [
   {
     linkTo: "/admin/user-management",
     tooltip: "Quản lý người dùng",
-    mainContent: "Users",
+    mainContent: "Quản lý người dùng",
     icon: PeopleIcon,
   },
   {
     linkTo: "/admin/category-management",
     tooltip: "Quản lý danh mục",
-    mainContent: "Categories",
+    mainContent: "Quản lý danh mục",
     icon: CategoryIcon,
   },
   {
     linkTo: "/admin/product-management",
     tooltip: "Quản lý sản phẩm",
-    mainContent: "Products",
+    mainContent: "Quản lý sản phẩm",
     icon: BookIcon,
   },
   {
     linkTo: "/admin/product-image-management",
     tooltip: "Quản lý hình ảnh sản phẩm",
-    mainContent: "Product images",
+    mainContent: "Quản lý hình ảnh",
     icon: ImageIcon,
   },
   {
     linkTo: "/admin/sale-order-management",
     tooltip: "Quản lý đơn hàng",
-    mainContent: "Sale orders",
+    mainContent: "Quản lý đơn hàng",
     icon: ReceiptIcon,
   },
   {
     linkTo: "/admin/banner-management",
     tooltip: "Quản lý banner",
-    mainContent: "Banner",
+    mainContent: "Quản lý banner",
     icon: ViewCarouselIcon,
   }
 ];

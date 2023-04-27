@@ -182,7 +182,7 @@ export default function SignIn() {
               required
               fullWidth
               id="username"
-              label="Username"
+              label="Tài khoản"
               name="username"
               autoComplete="email"
               onChange={handleInputChange}
@@ -193,7 +193,7 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Mật khẩu"
               type="password"
               id="password"
               autoComplete="current-password"

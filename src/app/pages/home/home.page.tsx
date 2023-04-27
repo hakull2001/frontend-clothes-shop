@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Box, Button, Grid, Typography } from "@material-ui/core";
+import { Box, Button, Container, Grid, Typography } from "@material-ui/core";
 import { Helmet } from "react-helmet-async";
 import {
   bannerCombo,
@@ -17,6 +17,7 @@ import useObservable from "@core/hooks/use-observable.hook";
 import { Product } from "@app/models/product.model";
 import ProductItem from "@app/components/product-item";
 import MainSlider from "@app/components/main-slider";
+import ImageSlider from "@app/components/imageSlider";
 
 function HomePage() {
   const classes = useStyles();
@@ -67,14 +68,30 @@ function HomePage() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const slides = [
+    { url: "https://cf.shopee.vn/file/vn-50009109-5b3d1d0bb30e85748b0537ff9f32ea05", title: "beach" },
+    { url: "https://cf.shopee.vn/file/856d76a2fb06e2fbf00a82d2e37151d9", title: "boat" }
+  ];
+  const containerStyles = {
+    width: "100%",
+    height: "400px",
+    margin: "0 auto",
+  };
 
   return (
     <>
       <Helmet>
         <title>Trang chủ</title>
       </Helmet>
+      
       <AppBar />
+      <Container style={{marginTop:45, overflow:'hidden'}}>
+      <div style={containerStyles}>
+        <ImageSlider slides={slides} parentWidth={1700} />
+      </div> 
+      </Container>
       <MainSlider />
+        
       <Box
         marginTop={2}
         paddingX={5.5}
@@ -82,7 +99,7 @@ function HomePage() {
         style={{ margin: "0 auto" }}
       >
         <Box marginTop={5}>
-          <Typography variant="h6" gutterBottom align="center">
+          <Typography variant="h6" gutterBottom align="left">
             SÁCH MỚI
           </Typography>
 
@@ -105,7 +122,7 @@ function HomePage() {
         </Box>
 
         <Box marginTop={5} marginBottom={5}>
-          <Typography variant="h6" gutterBottom align="center">
+          <Typography variant="h6" gutterBottom align="left">
             SÁCH BÁN CHẠY
           </Typography>
 
@@ -131,9 +148,9 @@ function HomePage() {
         </Box>
       </Box>
 
-      <div className="banner-combo">
+      {/* <div className="banner-combo">
         <img className={classes.bannerComboImg} src={bannerCombo} alt="" />
-      </div>
+      </div> */}
 
       <Box
         marginTop={2}
@@ -142,7 +159,7 @@ function HomePage() {
         style={{ margin: "0 auto" }}
       >
         <Box marginTop={5} marginBottom={5}>
-          <Typography variant="h6" gutterBottom align="center">
+          <Typography variant="h6" gutterBottom align="left">
             COMBO
           </Typography>
 
@@ -168,9 +185,9 @@ function HomePage() {
         </Box>
       </Box>
 
-      <div className="banner-manga">
+      {/* <div className="banner-manga">
         <img className={classes.bannerMangaImg} src={bannerManga} alt="" />
-      </div>
+      </div> */}
 
       <Box
         marginTop={2}
@@ -179,7 +196,7 @@ function HomePage() {
         style={{ margin: "0 auto" }}
       >
         <Box marginTop={5}>
-          <Typography variant="h6" gutterBottom align="center">
+          <Typography variant="h6" gutterBottom align="left">
             MANGA - COMIC
           </Typography>
 
@@ -205,13 +222,13 @@ function HomePage() {
         </Box>
       </Box>
 
-      <div className="banner-wings">
+      {/* <div className="banner-wings">
         <img
           className={classes.bannerWingsBooksImg}
           src={bannerWingsbooks}
           alt=""
         />
-      </div>
+      </div> */}
 
       <Box
         marginTop={2}
@@ -220,7 +237,7 @@ function HomePage() {
         style={{ margin: "0 auto" }}
       >
         <Box marginTop={5} marginBottom={5}>
-          <Typography variant="h6" gutterBottom align="center">
+          <Typography variant="h6" gutterBottom align="left">
             WINGS BOOKS
           </Typography>
 

@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { Product } from "@app/models/product.model";
 import { imageNotFound } from "@app/shared/constants/common";
 import "./product-item.style.scss";
 import ViewService from "@app/services/view.service";
+import { Rating } from "@material-ui/lab";
 
 type PropTypes = {
   item: Product;
@@ -23,6 +24,7 @@ function ProductItem(props: PropTypes) {
   const onProductItemClick = () => {
     ViewService.addLastView(item.id);
   };
+  
 
   return (
     <>
@@ -33,7 +35,9 @@ function ProductItem(props: PropTypes) {
       >
         <div
           className="col-xl-3 col-lg-3 col-md-3 bcontent"
-          style={{ padding: "0 1em", minHeight: "100%" }}
+          style={{ padding: "0 1em", minHeight: "100%",
+          marginLeft : 10,
+        border: "2px solid black" }}
         >
           <div>
             <span>
@@ -44,6 +48,7 @@ function ProductItem(props: PropTypes) {
             <div className="name">
               <span>{item.title}</span>
               <div className="creator">{item.author}</div>
+              {/* <Rating value={Math.floor(Math.random() * 5) + 1} style={{color : 'orange'}}></Rating> */}
               <div className="price">
                 <div>{item.price.toLocaleString("en")} đ</div>
                 <div className="buy">
@@ -54,6 +59,7 @@ function ProductItem(props: PropTypes) {
             </div>
           </div>
         </div>
+
       </Link>
     </>
   );
