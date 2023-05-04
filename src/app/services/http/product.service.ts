@@ -1,5 +1,6 @@
 import { map } from "rxjs/operators";
 import HttpService, {
+  CoreResponse,
   PaginationOption,
   ResponseResult,
 } from "@core/services/http/http.service";
@@ -28,6 +29,10 @@ class _ProductService {
     );
   }
 
+  public getListSellProducts(){
+    return HttpService.get("/products/sell-products")
+    .pipe(map<any,CoreResponse>((response)=>response.result.data))
+  }
   public getListByCategory(
     categoryId: number | string,
     options?: PaginationOption

@@ -29,6 +29,9 @@ import SaleOrderService, {
   SaleOrderPaginationOption,
 } from "@app/services/http/sale-order.service";
 import { calculateTotalAmount } from "@app/shared/helpers/helpers";
+import SaaS from "@app/pages/dashboards/SaaS";
+import { useSelector } from "react-redux";
+import { GlobalState } from "@app/store";
 
 const calculateTotalSaleOrders = (saleOrders: SaleOrder[]): number => {
   let total = 0;
@@ -135,13 +138,16 @@ function RecentOrderManagement() {
     setPagination(options);
   };
 
+  
   return (
     <Container maxWidth="lg" className={classes.container}>
       <Grid item xs={12}>
         <Typography variant="h4" className={classes.screenName}>
-          Thống kê đơn đặt hàng
+          Số liệu thống kê
         </Typography>
-        <Grid item xs={12}>
+        {/* <DashboardLayout/> */}
+        <SaaS/>
+        {/* <Grid item xs={12}>
           <Box paddingY={2}>
             <Typography style={{ marginBottom: "1em" }}>
               Lọc theo khoảng ngày
@@ -232,7 +238,7 @@ function RecentOrderManagement() {
               onRowsPerPageChange={handleRowsPerPageChange}
             />
           </Paper>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Container>
   );

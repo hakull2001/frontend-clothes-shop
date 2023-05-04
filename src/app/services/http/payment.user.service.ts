@@ -14,6 +14,13 @@ class _PaymentUserService {
       public getTotalPayment(){
         return HttpService.get("/payment/total")
         .pipe(map<any, ResponseResult>((response) => response));      }
+
+        public getListForAdmin(options?: PaginationOption) {
+          return HttpService.get("/payment/admin", {
+            queryParams: { ...options },
+          }).pipe(map<any, ResponseResult>((response) => response.result));
+        }
+      
 }
 
 

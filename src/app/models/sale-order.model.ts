@@ -19,3 +19,11 @@ export class SaleOrder extends Model {
     this.fill(data);
   }
 }
+
+export interface DashboardDTO {
+  saleOrders : number;
+  budget : number;
+  products : number;
+  month : number;
+  customers : number;
+}

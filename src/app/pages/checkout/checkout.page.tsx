@@ -237,6 +237,7 @@ function Checkout() {
               variant="contained"
               color="primary"
               onClick={() => navigate("/", { replace: true })}
+              style={{backgroundColor:'#000000'}}
             >
               Tiếp tục mua
             </Button>

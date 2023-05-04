@@ -235,14 +235,14 @@ function UserManagement() {
   return (
     <Container maxWidth="xl" className={classes.container}>
       <Typography variant="h4" className={classes.screenName}>
-        Quản lý người dùng
+        Quản lý khách hàng
       </Typography>
       <Box style={{ display: "flex" }}>
         <Button variant="contained" color="primary" onClick={onAddUserClick}>
-          Thêm người dùng
+          Thêm khách hàng
         </Button>
         <PopupDialog
-          title="Biểu mẫu người dùng"
+          title="Thông tin khách hàng"
           openPopup={isOpenPopup}
           setOpenPopup={setIsOpenPopup}
         >
@@ -255,7 +255,7 @@ function UserManagement() {
         </PopupDialog>
         <TextField
           style={{ marginLeft: "1em" }}
-          label="Tìm kiếm theo tên người dùng"
+          label="Tìm kiếm theo tài khoản"
           variant="outlined"
           size="small"
           value={searchState}
@@ -277,7 +277,7 @@ function UserManagement() {
                 <TableCell>STT</TableCell>
                 <TableCell>Tên</TableCell>
                 <TableCell>Họ</TableCell>
-                <TableCell>Tên người dùng</TableCell>
+                <TableCell>Tài khoản</TableCell>
                 <TableCell>Điện thoại</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Địa chỉ</TableCell>

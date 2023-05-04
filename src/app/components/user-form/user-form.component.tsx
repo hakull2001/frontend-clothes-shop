@@ -87,7 +87,7 @@ function UserForm(props: PropTypes) {
         ? "Trường này là bắt buộc"
         : /^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$/.test(fieldValues.username)
         ? ""
-        : "Tên người dùng chỉ chứa các chữ cái, số và ký tự:. hoặc _";
+        : "Tài khoản chỉ chứa các chữ cái, số và ký tự:. hoặc _";
     }
     if (isEdit) {
       if (fieldValues.password) {
@@ -212,7 +212,7 @@ function UserForm(props: PropTypes) {
         <Grid item xs={6}>
           <Controls.Input
             name="username"
-            label="Tên người dùng"
+            label="Tài khoản"
             value={values.username ?? ""}
             onChange={handleInputChange}
             error={errors.username}

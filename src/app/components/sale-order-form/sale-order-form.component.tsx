@@ -290,7 +290,7 @@ function SaleOrderForm(props: PropTypes) {
             </Grid>
             <Grid item xs={12}>
               <div style={{ textAlign: "center" }}>
-                <Controls.Button type="submit" text="Submit" />
+                <Controls.Button type="submit" text="Xác nhận" />
               </div>
             </Grid>
           </Grid>

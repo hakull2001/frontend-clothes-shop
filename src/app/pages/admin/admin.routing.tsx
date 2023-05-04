@@ -1,5 +1,6 @@
 import { Role } from "@app/shared/types/user.type";
 import { RouteGuardShape } from "@core/types/route.type";
+import SaaS from "../dashboards/SaaS";
 import BannerManagement from "./banner-management";
 import CategoryManagement from "./category-management";
 import ProductImageManagement from "./product-image-management";

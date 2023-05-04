@@ -1,9 +1,10 @@
 import { map } from "rxjs/operators";
 import HttpService, {
+  CoreResponse,
   PaginationOption,
   ResponseResult,
 } from "@core/services/http/http.service";
-import { SaleOrder } from "@app/models/sale-order.model";
+import { DashboardDTO, SaleOrder } from "@app/models/sale-order.model";
 import { FETCH_TYPE } from "@app/shared/constants/common";
 
 export type SaleOrderPaginationOption = PaginationOption & {
@@ -32,6 +33,16 @@ class _SaleOrderService {
     }).pipe(map<any, ResponseResult>((response) => response.result));
   }
 
+  public getList(){
+    return HttpService.get("/sale-orders/sale-orders-all").pipe(map<any, CoreResponse>((response)=>response))
+  }
+  public getDashboard(){
+    return HttpService.get("/sale-orders/list").pipe(map<any, DashboardDTO>((response)=>response))
+  }
+
+  public getDashboardAllMonth(){
+    return HttpService.get("/sale-orders/months").pipe(map<any, DashboardDTO>((response)=>response))
+  }
   public getSaleOrderForAdmin(saleOrderId: number) {
     return HttpService.get(`/sale-orders/admin/${saleOrderId}`).pipe(
       map<any, SaleOrder>((response) => response.result.data)

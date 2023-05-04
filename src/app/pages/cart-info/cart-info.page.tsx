@@ -83,7 +83,7 @@ function CartInfo() {
               </Typography>
               <Box style={{ textAlign: "center", marginTop: "1em" }}>
                 <Link to="/" style={{ color: "white", textDecoration: "none" }}>
-                  <Button variant="contained" color="primary">
+                  <Button variant="contained" color="primary" style={{backgroundColor:'#000000'}}>
                     Mua ngay
                   </Button>
                 </Link>
